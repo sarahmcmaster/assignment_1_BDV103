@@ -10,16 +10,16 @@ listRouter.get('/books', async (ctx) => {
   try {
     let bookList = readBooksFromJsonData();
 
-    // Todo: Uncomment to Apply filters
-    // if (filters && Array.isArray(filters) && filters.length > 0) {
-    //   if (!validateFilters(filters)) {
-    //     ctx.status = 400;
-    //     ctx.body = { error: 'Invalid filters. Each filter must have valid "from" and "to" numbers where from <= to.' };
-    //     return;
-    //   }
+     
+     if (filters && Array.isArray(filters) && filters.length > 0) {
+       if (!validateFilters(filters)) {
+         ctx.status = 400;
+         ctx.body = { error: 'Invalid filters. Each filter must have valid "from" and "to" numbers where from <= to.' };
+         return;
+       }
 
-    //   bookList = filterBooks(bookList, filters);
-    // }
+       bookList = filterBooks(bookList, filters);
+     }
 
     ctx.body = bookList;
   } catch (error) {
