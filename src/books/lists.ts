@@ -1,6 +1,8 @@
 import Router from '@koa/router';
 import { Book } from '../../adapter/assignment-2';
-import books from '../../mcmasteful-book-list.json';
+import { getDatabase } from "./db";
+
+console.log("LOADED lists.ts from Mongo version");
 
 const listRouter = new Router();
 
@@ -8,7 +10,7 @@ listRouter.get('/books', async (ctx) => {
   const filters = ctx.query.filters as Array<{ from?: string, to?: string }> | undefined;
 
   try {
-    let bookList = readBooksFromJsonData();
+    let bookList: Book[] = await readBooksFromMongo();
 
      
      if (filters && Array.isArray(filters) && filters.length > 0) {
@@ -58,9 +60,21 @@ function validateFilters(filters: any): boolean {
   });
 }
 
-function readBooksFromJsonData(): Book[] {
-  return books as Book[];
+async function readBooksFromMongo(): Promise<Book[]> {
+  const db = getDatabase();
+  const docs = await db.collection("books").find({}).toArray();
+
+  // map Mongo _id -> id (string) so your adapter/UI can use it
+  return docs.map((d: any) => ({
+    id: String(d._id),
+    name: d.name,
+    author: d.author,
+    description: d.description,
+    price: d.price,
+    image: d.image,
+  }));
 }
+
 
 // Filter books by price range - a book matches if it falls within ANY of the filter ranges
 function filterBooks(bookList: Book[], filters: Array<{ from?: string, to?: string }>): Book[] {

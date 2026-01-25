@@ -1,6 +1,8 @@
 import Router from '@koa/router';
 import listRouter from './lists';
-import books from '../../mcmasteful-book-list.json';
+import crypto from "crypto";
+import { ObjectId } from "mongodb";
+import { getDatabase } from "./db";
 
 const router = new Router();
 
@@ -80,6 +82,7 @@ router.delete("/books/:id", async (ctx) => {
   ctx.body = { error: "id is required" };
   return;
 }
+
   //find the book record
 const index = (books as any).findIndex((b: any) => b.id === id);
 // if book is not found, return 404 message
@@ -92,6 +95,7 @@ if (index == -1) {
 (books as any).splice(index, 1);
 ctx.status = 204; 
 });
+
 
 // Update book route (not yet implemented)
 router.put('/books/:id', async (ctx) => {
