@@ -75,11 +75,11 @@ router.delete("/books/:id", async (ctx) => {
   const id = ctx.params.id;
 
   //validation of id string to see if there
-  if(id || typeof id !== "string") {
-    ctx.status = 400;
-    ctx.body = { error: "id is required"};
-    return;
-  }
+  if (!id || typeof id !== "string") {
+  ctx.status = 400;
+  ctx.body = { error: "id is required" };
+  return;
+}
   //find the book record
 const index = (books as any).findIndex((b: any) => b.id === id);
 // if book is not found, return 404 message

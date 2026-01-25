@@ -1,0 +1,11 @@
+HTTP/1.1 400 Bad Request
+Vary: Origin
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 26
+Date: Sun, 25 Jan 2026 18:47:40 GMT
+Connection: close
+
+{
+  "error": "id is required"
+}
