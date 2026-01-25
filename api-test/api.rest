@@ -1,6 +1,7 @@
 ### Book API Tests
 ### Base URL
 @baseUrl = http://localhost:3000
+@bookId =991d8cf7-d87c-4694-bd64-b1f65cf239a9
 
 ### 1. Create a new book
 # @name createBook

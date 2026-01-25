@@ -8,7 +8,7 @@ const router = new Router();
 router.use(listRouter.routes());
 router.use(listRouter.allowedMethods());
 
-// Create book route (not yet implemented)
+// Create book route (implemented)
 router.post('/books', async (ctx) => {
  const body = ctx.request.body as any;
 
@@ -17,7 +17,7 @@ router.post('/books', async (ctx) => {
   const description = typeof body?.description === 'string' ? body.description.trim() : '';
   const image = typeof body?.image === 'string' ? body.image.trim() : '';
 
-  // price could arrive as a number (expected) or as a string
+  // if price could arrives as a number (expected) or as a string
   const priceRaw = body?.price;
   const price =
     typeof priceRaw === 'number'
@@ -25,7 +25,7 @@ router.post('/books', async (ctx) => {
       : typeof priceRaw === 'string'
         ? Number(priceRaw)
         : NaN;
-
+// validations and error handling if data is unexpected
   if (!name) {
     ctx.status = 400;
     ctx.body = { error: 'Name is required' };
@@ -52,7 +52,7 @@ router.post('/books', async (ctx) => {
 
     if (!image) {
     ctx.status = 400;
-    ctx.body = { error: 'image is required' };
+    ctx.body = { error: 'image url is required' };
     return;
   }
   const newBook = {
@@ -63,11 +63,34 @@ router.post('/books', async (ctx) => {
     price,
     image,
   };
-
+  //push books to end of lsit array
   books.push(newBook);
 
   ctx.status = 201;
   ctx.body = newBook;
+});
+
+//delete a book
+router.delete("/books/:id", async (ctx) => {
+  const id = ctx.params.id;
+
+  //validation of id string to see if there
+  if(id || typeof id !== "string") {
+    ctx.status = 400;
+    ctx.body = { error: "id is required"};
+    return;
+  }
+  //find the book record
+const index = (books as any).findIndex((b: any) => b.id === id);
+// if book is not found, return 404 message
+if (index == -1) {
+  ctx.status = 404; 
+  ctx.body = {error: "Book not found"};
+  return;
+}
+//removing the record
+(books as any).splice(index, 1);
+ctx.status = 204; 
 });
 
 // Update book route (not yet implemented)
