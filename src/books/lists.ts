@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { Book } from '../../adapter/assignment-1';
+import { Book } from '../../adapter/assignment-2';
 import books from '../../mcmasteful-book-list.json';
 
 const listRouter = new Router();
