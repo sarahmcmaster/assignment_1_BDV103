@@ -7,3 +7,5 @@ services:
     volumes:
       - ../..:/workspaces:cached
     command: sleep infinity
+  
+  mongo: mongo 6.0.6
