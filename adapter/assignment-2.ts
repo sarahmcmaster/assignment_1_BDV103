@@ -16,7 +16,53 @@ async function listBooks(filters?: Array<{from?: number, to?: number}>) : Promis
 }
 
 async function createOrUpdateBook(book: Book): Promise<BookID> {
-    throw new Error("Todo")
+  const baseUrl = "http://localhost:3000";
+
+  const hasId = typeof book.id === "string" && book.id.trim().length > 0;
+  const url = hasId
+    ? `${baseUrl}/books/${encodeURIComponent(book.id!)}`
+    : `${baseUrl}/books`;
+
+  const method = hasId ? "PUT" : "POST";
+
+  const result = await fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: book.name,
+      author: book.author,
+      description: book.description,
+      price: book.price,
+      image: book.image,
+    }),
+  });
+
+  // If the API returned an error status, throw a descriptive Error
+  if (!result.ok) {
+    let apiMessage = "";
+    try {
+      const err = await result.json();
+      if (err?.error) apiMessage = String(err.error);
+    } catch {
+      // ignore JSON parse errors (some APIs return empty body)
+    }
+
+    throw new Error(
+      `Failed to ${hasId ? "update" : "create"} book (HTTP ${result.status})` +
+        (apiMessage ? `: ${apiMessage}` : "")
+    );
+  }
+
+  // On success, the API should return JSON including an id
+  const data = await result.json();
+
+  if (!data?.id) {
+    throw new Error("API did not return a book id");
+  }
+
+  return String(data.id);
 }
 
 async function removeBook(book: BookID): Promise<void> {
