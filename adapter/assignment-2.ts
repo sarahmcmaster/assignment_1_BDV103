@@ -88,6 +88,7 @@ async function removeBook(bookId: BookID): Promise<void> {
         (apiMessage ? `: ${apiMessage}` : "")
     );
   }
+}
 
 
 const assignment = "assignment-2";

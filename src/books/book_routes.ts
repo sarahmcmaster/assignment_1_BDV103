@@ -156,26 +156,29 @@ router.put('/books/:id', async (ctx) => {
   const db = getDatabase();
 
   const result = await db.collection("books").findOneAndUpdate(
-    { _id },
-    { $set: { name, author, description, price, image } },
-    { returnDocument: "after" }
-  );
+  { _id },
+  { $set: { name, author, description, price, image } },
+  { returnDocument: "after" }
+);
 
-  if (!result.value) {
-    ctx.status = 404;
-    ctx.body = { error: "Book not found" };
-    return;
-  }
+// handle result possibly being null (TypeScript strict mode)
+if (!result || !result.value) {
+  ctx.status = 404;
+  ctx.body = { error: "Book not found" };
+  return;
+}
 
-  ctx.status = 200;
-  ctx.body = {
-    id,
-    name: result.value.name,
-    author: result.value.author,
-    description: result.value.description,
-    price: result.value.price,
-    image: result.value.image,
-  };
+const updated = result.value;
+
+ctx.status = 200;
+ctx.body = {
+  id,
+  name: updated.name,
+  author: updated.author,
+  description: updated.description,
+  price: updated.price,
+  image: updated.image,
+};
 });
 
 export default router;
