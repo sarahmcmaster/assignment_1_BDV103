@@ -57,19 +57,26 @@ router.post('/books', async (ctx) => {
     ctx.body = { error: 'image url is required' };
     return;
   }
-  const newBook = {
-    id: crypto.randomUUID(),
+
+  const db = getDatabase ();
+// writes new book to collection
+  const result = await db.collection("books").insertOne({
+    name,
+    author,
+    description,
+    price,
+    image,
+  });
+//returns message 
+ ctx.status = 201;
+  ctx.body = {
+    id: String(result.insertedId),
     name,
     author,
     description,
     price,
     image,
   };
-  //push books to end of lsit array
-  books.push(newBook);
-
-  ctx.status = 201;
-  ctx.body = newBook;
 });
 
 //delete a book
