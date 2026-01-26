@@ -79,30 +79,39 @@ router.post('/books', async (ctx) => {
   };
 });
 
-//delete a book
-router.delete("/books/:id", async (ctx) => {
-  const id = ctx.params.id;
+//Delete a book (implemented)
+router.delete('/books/:id', async (ctx) => {
+  const id = String(ctx.params.id ?? "").trim();
 
   //validation of id string to see if there
-  if (!id || typeof id !== "string") {
-  ctx.status = 400;
-  ctx.body = { error: "id is required" };
-  return;
-}
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { error: "id is required" };
+    return;
+  }
 
   //find the book record
-const index = (books as any).findIndex((b: any) => b.id === id);
-// if book is not found, return 404 message
-if (index == -1) {
-  ctx.status = 404; 
-  ctx.body = {error: "Book not found"};
-  return;
-}
-//removing the record
-(books as any).splice(index, 1);
-ctx.status = 204; 
-});
+let _id: ObjectId;
+  try {
+    _id = new ObjectId(id);
+  } 
+catch {
+    ctx.status = 400;
+    ctx.body = { error: "id must be a valid ObjectId" };
+    return;
+  }
 
+  const db = getDatabase();
+  const result = await db.collection("books").deleteOne({ _id });
+
+  if (result.deletedCount === 0) {
+    ctx.status = 404;
+    ctx.body = { error: "Book not found" };
+    return;
+  }
+
+  ctx.status = 204;
+});
 
 // Update book route (not yet implemented)
 router.put('/books/:id', async (ctx) => {

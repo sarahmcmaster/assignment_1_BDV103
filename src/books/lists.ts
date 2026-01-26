@@ -60,22 +60,6 @@ function validateFilters(filters: any): boolean {
   });
 }
 
-async function readBooksFromMongo(): Promise<Book[]> {
-  const db = getDatabase();
-  const docs = await db.collection("books").find({}).toArray();
-
-  // map Mongo _id -> id (string) so your adapter/UI can use it
-  return docs.map((d: any) => ({
-    id: String(d._id),
-    name: d.name,
-    author: d.author,
-    description: d.description,
-    price: d.price,
-    image: d.image,
-  }));
-}
-
-
 // Filter books by price range - a book matches if it falls within ANY of the filter ranges
 function filterBooks(bookList: Book[], filters: Array<{ from?: string, to?: string }>): Book[] {
   return bookList.filter(book =>
