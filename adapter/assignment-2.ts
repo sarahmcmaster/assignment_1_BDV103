@@ -65,9 +65,30 @@ async function createOrUpdateBook(book: Book): Promise<BookID> {
   return String(data.id);
 }
 
-async function removeBook(book: BookID): Promise<void> {
-    throw new Error("Todo")
-}
+async function removeBook(bookId: BookID): Promise<void> {
+  const baseUrl = "http://localhost:3000";
+
+  if (!bookId || typeof bookId !== "string") {
+    throw new Error("bookId is required");
+  }
+
+  const url = `${baseUrl}/books/${encodeURIComponent(bookId)}`;
+
+  const result = await fetch(url, { method: "DELETE" });
+
+  if (!result.ok) {
+    let apiMessage = "";
+    try {
+      const err = await result.json();
+      if (err?.error) apiMessage = String(err.error);
+    } catch {}
+
+    throw new Error(
+      `Failed to delete book (HTTP ${result.status})` +
+        (apiMessage ? `: ${apiMessage}` : "")
+    );
+  }
+
 
 const assignment = "assignment-2";
 
