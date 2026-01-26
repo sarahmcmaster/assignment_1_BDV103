@@ -24,6 +24,5 @@ GET {{baseUrl}}/books
 
 ###
 ### 3. Delete the book
-DELETE {{baseUrl}}/books/dff6a857-279c-4785-a91b-3311c9fea0d7
-
+DELETE {{baseUrl}}/books/{{bookId}}
 ###

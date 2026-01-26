@@ -29,6 +29,19 @@ listRouter.get('/books', async (ctx) => {
     ctx.body = { error: `Failed to fetch books due to: ${error}` };
   }
 });
+async function readBooksFromMongo(): Promise<Book[]> {
+  const db = getDatabase();
+  const docs = await db.collection("books").find({}).toArray();
+
+  return docs.map((d: any) => ({
+    id: String(d._id),
+    name: d.name,
+    author: d.author,
+    description: d.description,
+    price: d.price,
+    image: d.image,
+  }));
+}
 
 function validateFilters(filters: any): boolean {
   // Check if filters exist and are an array
