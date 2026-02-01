@@ -68,13 +68,13 @@ async function createOrUpdateBook(book: Book): Promise<BookID> {
   }
 
   // On success, the API should return JSON including an id
-  const data = await result.json();
+const data: unknown = await result.json();
 
-  if (!data?.id) {
-    throw new Error('API did not return a book id');
-  }
+if (!hasIdField(data) || data.id === undefined || data.id === null) {
+  throw new Error('Response did not include id');
+}
 
-  return String(data.id);
+return String(data.id);
 }
 
 async function removeBook(bookId: BookID): Promise<void> {
