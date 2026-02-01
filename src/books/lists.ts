@@ -89,8 +89,6 @@ function validateFilters(filters: unknown): boolean {
   });
 }
 
-
-
 // Filter books by price range - a book matches if it falls within ANY of the filter ranges
 function filterBooks(
   bookList: Book[],
