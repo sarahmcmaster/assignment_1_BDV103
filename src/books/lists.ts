@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import { Book } from '../../adapter/assignment-2';
+import { Book } from '../../adapter/assignment-3';
 import { getDatabase } from './db';
 
 console.log('LOADED lists.ts from Mongo version');
