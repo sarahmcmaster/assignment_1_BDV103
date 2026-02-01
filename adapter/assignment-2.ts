@@ -11,6 +11,16 @@ export interface Book {
   image: string;
 }
 
+// helper guards
+function hasErrorField(value: unknown): value is { error: unknown } {
+  return typeof value === 'object' && value !== null && 'error' in value;
+}
+
+function hasIdField(value: unknown): value is { id: unknown } {
+  return typeof value === 'object' && value !== null && 'id' in value;
+}
+
+
 async function listBooks(
   filters?: Array<{ from?: number; to?: number }>,
 ): Promise<Book[]> {
@@ -45,11 +55,11 @@ async function createOrUpdateBook(book: Book): Promise<BookID> {
   if (!result.ok) {
     let apiMessage = '';
     try {
-      const err = await result.json();
-      if (err?.error) apiMessage = String(err.error);
+      const err: unknown = await result.json();
+     if (hasErrorField(err)) apiMessage = String(err.error);
     } catch {
-      // ignore JSON parse errors (some APIs return empty body)
-    }
+  // Response body wasn't JSON (or couldn't be read).
+  }
 
     throw new Error(
       `Failed to ${hasId ? 'update' : 'create'} book (HTTP ${result.status})` +
@@ -81,9 +91,9 @@ async function removeBook(bookId: BookID): Promise<void> {
   if (!result.ok) {
     let apiMessage = '';
     try {
-      const err = await result.json();
-      if (err?.error) apiMessage = String(err.error);
-    } catch (_err) {
+      const err: unknown = await result.json();
+      if (hasErrorField(err)) apiMessage = String(err.error);
+    } catch {
       // Response body wasn't JSON (or couldn't be read). Ignore and use generic message.
     }
 
