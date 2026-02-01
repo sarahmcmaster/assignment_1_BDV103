@@ -59,26 +59,24 @@ async function readBooksFromMongo(): Promise<Book[]> {
 }));
 }
 
-function validateFilters(filters: unknown): filters is unknown[] {
+function validateFilters(filters: unknown): boolean {
   if (!filters || !Array.isArray(filters)) {
     return false;
   }
-  return true;
-}
 
   // Check each filter object in the array
-  return filters.every((filter) => {
+  return (filters as Array<{ from?: unknown; to?: unknown }>).every((filter) => {
     const from =
-      filter.from !== undefined ? parseFloat(filter.from) : undefined;
-    const to = filter.to !== undefined ? parseFloat(filter.to) : undefined;
+      filter.from !== undefined ? parseFloat(String(filter.from)) : undefined;
+    const to = filter.to !== undefined ? parseFloat(String(filter.to)) : undefined;
 
     // If from is provided, it must be a valid number
-    if (from !== undefined && isNaN(from)) {
+    if (from !== undefined && Number.isNaN(from)) {
       return false;
     }
 
     // If to is provided, it must be a valid number
-    if (to !== undefined && isNaN(to)) {
+    if (to !== undefined && Number.isNaN(to)) {
       return false;
     }
 
@@ -89,6 +87,8 @@ function validateFilters(filters: unknown): filters is unknown[] {
 
     return true;
   });
+}
+
 
 
 // Filter books by price range - a book matches if it falls within ANY of the filter ranges
