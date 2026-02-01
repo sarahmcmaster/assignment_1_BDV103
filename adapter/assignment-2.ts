@@ -83,7 +83,9 @@ async function removeBook(bookId: BookID): Promise<void> {
     try {
       const err = await result.json();
       if (err?.error) apiMessage = String(err.error);
-    } catch {}
+    } catch (_err) {
+      // Response body wasn't JSON (or couldn't be read). Ignore and use generic message.
+    }
 
     throw new Error(
       `Failed to delete book (HTTP ${result.status})` +
