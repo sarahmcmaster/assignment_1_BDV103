@@ -1,6 +1,5 @@
 import Router from '@koa/router';
 import listRouter from './lists';
-import crypto from 'crypto';
 import { ObjectId } from 'mongodb';
 import { getDatabase } from './db';
 import type { Context } from 'koa';
@@ -143,7 +142,7 @@ router.put('/books/:id', async (ctx) => {
     return;
   }
 
-  const body = ctx.request.body as any;
+  const body = ctx.request.body as CreateBookBody;
 
   const name = typeof body?.name === 'string' ? body.name.trim() : '';
   const author = typeof body?.author === 'string' ? body.author.trim() : '';

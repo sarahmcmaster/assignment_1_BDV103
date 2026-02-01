@@ -4,6 +4,18 @@ import { getDatabase } from './db';
 
 console.log('LOADED lists.ts from Mongo version');
 
+//defines the book type
+type MongoBookDoc = {
+  _id: unknown;
+  name?: unknown;
+  author?: unknown;
+  description?: unknown;
+  price?: unknown;
+  image?: unknown;
+};
+
+
+
 const listRouter = new Router();
 
 listRouter.get('/books', async (ctx) => {
@@ -36,22 +48,23 @@ listRouter.get('/books', async (ctx) => {
 async function readBooksFromMongo(): Promise<Book[]> {
   const db = getDatabase();
   const docs = await db.collection('books').find({}).toArray();
-
-  return docs.map((d: any) => ({
-    id: String(d._id),
-    name: d.name,
-    author: d.author,
-    description: d.description,
-    price: d.price,
-    image: d.image,
-  }));
+//Map body
+  return docs.map((d: MongoBookDoc): Book => ({
+  id: String(d._id),
+  name: typeof d.name === 'string' ? d.name : '',
+  author: typeof d.author === 'string' ? d.author : '',
+  description: typeof d.description === 'string' ? d.description : '',
+  price: typeof d.price === 'number' ? d.price : 0,
+  image: typeof d.image === 'string' ? d.image : '',
+}));
 }
 
-function validateFilters(filters: any): boolean {
-  // Check if filters exist and are an array
+function validateFilters(filters: unknown): filters is unknown[] {
   if (!filters || !Array.isArray(filters)) {
     return false;
   }
+  return true;
+}
 
   // Check each filter object in the array
   return filters.every((filter) => {
@@ -76,7 +89,7 @@ function validateFilters(filters: any): boolean {
 
     return true;
   });
-}
+
 
 // Filter books by price range - a book matches if it falls within ANY of the filter ranges
 function filterBooks(

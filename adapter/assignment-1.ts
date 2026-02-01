@@ -1,4 +1,4 @@
-import books from './../mcmasteful-book-list.json';
+import _books from './../mcmasteful-book-list.json';
 
 export interface Book {
   name: string;
