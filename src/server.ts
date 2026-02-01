@@ -3,7 +3,7 @@ import cors from '@koa/cors';
 import bodyParser from 'koa-bodyparser';
 import qs from 'koa-qs';
 import bookRoutes from './books/book_routes';
-import { connectToDatabase } from "./books/db";
+import { connectToDatabase } from './books/db';
 
 const app = new Koa();
 qs(app);
@@ -21,6 +21,6 @@ connectToDatabase()
     });
   })
   .catch((err) => {
-    console.error("Failed to connect to MongoDB:", err);
+    console.error('Failed to connect to MongoDB:', err);
     process.exit(1);
   });

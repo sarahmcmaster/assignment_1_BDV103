@@ -11,7 +11,10 @@ export default [
     files: ['**/*.ts'],
     //rule fore unused vars and params starting with _ allowed
     rules: {
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' },
+      ],
     },
   },
 ];
