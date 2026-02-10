@@ -1,5 +1,4 @@
-import assignment2 from './assignment-2.ts';
-import previous_assignment from './assignment-2.ts';
+import previous_assignment from './assignment-2';
 
 export type BookID = string;
 
@@ -24,7 +23,7 @@ export interface Filter {
 //defines function to return a book
 async function listBooks(filters?: Filter[]): Promise<Book[]> {
   // ask assign 2 implementation for the list of books
-  const allBooks = await assignment2.listBooks();
+  const allBooks = await previous_assignment.listBooks();
 // if filters not provided OR if empty array, return all
   if(!filters || filters.length === 0) {
     return allBooks;
