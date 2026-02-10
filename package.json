@@ -1,6 +1,5 @@
 {
   "name": "assignment-1",
-  "type": "module",
   "version": "1.0.0",
   "description": "This is a template repository for the first assignment in BVD 103 at McMaster Continuing Education.",
   "main": "index.js",
@@ -10,7 +9,9 @@
     "fix-lint": "eslint . --fix",
     "fmt": "prettier . --write",
     "fmt:check": "prettier . --check",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:ci": "vitest run"
   },
   "keywords": [],
   "author": "",

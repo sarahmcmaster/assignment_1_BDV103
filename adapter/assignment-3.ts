@@ -1,5 +1,5 @@
-import assignment2 from './assignment-2';
-import previous_assignment from './assignment-2';
+import assignment2 from './assignment-2.ts';
+import previous_assignment from './assignment-2.ts';
 
 export type BookID = string;
 
