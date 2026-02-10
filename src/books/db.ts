@@ -1,8 +1,6 @@
 import { MongoClient, Db } from 'mongodb';
 const MONGODB_URL =
-  process.env.MONGODB_URL ||
-  process.env.MONGO_URL ||
-  'mongodb://mongo:27017';
+  process.env.MONGODB_URL || process.env.MONGO_URL || 'mongodb://mongo:27017';
 
 const DATABASE_NAME = 'mcmasterful-books';
 
