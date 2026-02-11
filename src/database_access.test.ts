@@ -15,5 +15,5 @@ test('getBookDatabase returns a books collection', async () => {
   const found = await books.findOne({ name: 'Test Book' });
   expect(found?.author).toBe('Tester');
 
-  await database.dropDatabase(); // cleanup for isolation
+  await database.dropDatabase(); 
 });
